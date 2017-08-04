@@ -134,6 +134,24 @@ border: rgba(240, 0, 0, 1) solid 1px;
 #prenom.greenborder {
 border:#109177 solid 1px;
 }
+#pseudo.redborder {
+border: rgba(240, 0, 0, 1) solid 1px;
+}
+#pseudo.greenborder {
+border:#109177 solid 1px;
+}
+#password.redborder {
+border: rgba(240, 0, 0, 1) solid 1px;
+}
+#password.greenborder {
+border:#109177 solid 1px;
+}
+#repassword.redborder {
+border: rgba(240, 0, 0, 1) solid 1px;
+}
+#repassword.greenborder {
+border:#109177 solid 1px;
+}
 #mail.redborder {
 border: rgba(240, 0, 0, 1) solid 1px;
 }

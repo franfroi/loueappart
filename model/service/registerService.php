@@ -13,23 +13,49 @@ class registerService{
     function getUser() { return $this->user; }
 
     public function launchControls(){
-        //$this->params['username'] represente ici un $_POST['username']
-        if(empty($this->params['username'])){
-            $this->error['username']='Nom utilsateur manquant';
+        //$this->params['name'] represente ici un $_POST['name']
+
+        //nom
+        if(empty($this->params['name'])){
+            $this->error['name']='Nom obligatoire';
+        }
+        if(strlen($this->params['name'])<3){
+            $this->error['name']='Min 3 caractères';
         }
 
+        //prenom
+         if(empty($this->params['prenom'])){
+            $this->error['prenom']='Prénom obligatoire';
+        }
+        if(strlen($this->params['prenom'])<3){
+            $this->error['prenom']='Min 3 caractères';
+        }
+
+        //pseudo
+         if(empty($this->params['pseudo'])){
+            $this->error['pseudo']='Pseudo obligatoire';
+        }
+         if(strlen($this->params['pseudo'])<8){
+            $this->error['pseudo']='Min 8 caracteres';
+        }
+
+        //password
         if(empty($this->params['password'])){
-            $this->error['password']='Mot de passe manquant';
+            $this->error['password']='Mot de passe obligatoire';
         }
-
         if(strlen($this->params['password'])<8){
             $this->error['password']='Min 8 caracteres';
         }
-        if(($this->params['repassword'])!=($this->params['password'])){
-            $this->error['repassword']='Non identique password';
+
+        //repassword
+         if(($this->params['repassword'])!=($this->params['password'])){
+            $this->error['repassword']='Mot de passe non identique';
         }
+       
+       
+       
          if(empty($this->params['email'])){
-            $this->error['email']='Email manquant';
+            $this->error['email']='Email obligatoire';
         }
         if (!preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $this->params['email'])){
              $this->error['email']='Email non valide';
@@ -39,8 +65,9 @@ class registerService{
         return $this->error;
         }
 
-        $this->user=$this->checkMail();
-        if($this->user){
+//a faire
+       $email=$this->checkMail();
+        if($email){
             $this->error['email']='le mail existe deja';
             return $this->error;
 
