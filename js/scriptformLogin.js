@@ -48,7 +48,7 @@ $inputs.pseudo.focusout(function(event){
     if($(this).val().length < 8 ){
          //$(this).focus();
         $(this).addClass("redborder");
-        var msg = "Pseudo trop court !";
+        var msg = "Min 8 caractères";
          
         showError(msg, $inputs.pseudo);
       
@@ -82,7 +82,7 @@ $inputs.password.focusout(function(event){
    cleanErrors();
     if($(this).val().length < 8 ){
         $(this).addClass("redborder");
-        var msg = "Password trop court !";
+        var msg = "Min 8 caractères";
         showError(msg, $inputs.password);
         //$(this).focus();
         
@@ -99,11 +99,11 @@ $form.submit(function(event){ //On soumet/envoi le formulaire
  //check
    
      if( $inputs.pseudo.val().length < 8 ){
-        var msg = "Pseudo trop court !";
+        var msg = "Min 8 caractères";
         showError(msg, $inputs.pseudo);
     }
      if( $inputs.password.val().length < 8 ){
-        var msg = "Password trop court !";
+        var msg = "Min 8 caractères";
         showError(msg, $inputs.password);
     }
    

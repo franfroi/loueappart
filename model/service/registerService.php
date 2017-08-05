@@ -1,6 +1,7 @@
 <?php
 
-class registerService{
+class registerService
+{
     private $params;
     private $error;
     private $user;
@@ -16,33 +17,24 @@ class registerService{
         //$this->params['name'] represente ici un $_POST['name']
 
         //nom
-        if(empty($this->params['name'])){
-            $this->error['name']='Nom obligatoire';
-        }
         if(strlen($this->params['name'])<3){
             $this->error['name']='Min 3 caractères';
+                                  
+               
         }
 
         //prenom
-         if(empty($this->params['prenom'])){
-            $this->error['prenom']='Prénom obligatoire';
-        }
         if(strlen($this->params['prenom'])<3){
             $this->error['prenom']='Min 3 caractères';
+
         }
 
         //pseudo
-         if(empty($this->params['pseudo'])){
-            $this->error['pseudo']='Pseudo obligatoire';
-        }
-         if(strlen($this->params['pseudo'])<8){
+        if(strlen($this->params['pseudo'])<8){
             $this->error['pseudo']='Min 8 caracteres';
         }
 
         //password
-        if(empty($this->params['password'])){
-            $this->error['password']='Mot de passe obligatoire';
-        }
         if(strlen($this->params['password'])<8){
             $this->error['password']='Min 8 caracteres';
         }
@@ -54,67 +46,88 @@ class registerService{
        
        
        
-         if(empty($this->params['email'])){
-            $this->error['email']='Email obligatoire';
-        }
-        if (!preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $this->params['email'])){
-             $this->error['email']='Email non valide';
+        //mail
+        if (!preg_match('/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/', $this->params['mail'])){
+             $this->error['mail']='Email non valide';
         }
 
         if(empty($this->error)==false){
         return $this->error;
         }
-
-//a faire
-       $email=$this->checkMail();
-        if($email){
-            $this->error['email']='le mail existe deja';
-            return $this->error;
-
-        }
+        
         else{
-             $this->user=$this->register();
+                //envoie une session temporaire 
+               
+
+
+                $pseudo=$this->params['pseudo'];
+                $mail=$this->params['mail'];
+            
+                $bdd=new BddManager();
+                $userRepository = $bdd->getUserRepository();
+                $Amail = $userRepository->checkMail($mail);
+                $Apseudo = $userRepository->checkPseudo($pseudo);
+
+                // var_dump($Amail);
+                // die();
+                if(empty($Amail)==false){
+                    $this->error['mail']='Ce mail éxiste déja';
+                    
+                //     //envoie une session temporaire 
+                //     $tempMail="";      
+                //     $_SESSION["tempMail"] = $tempMail;
+                //      $tempName=$this->params['name'];      
+                // $_SESSION["tempName"] = $tempName;
+                
+                // $tempPrenom=$this->params['prenom'];      
+                // $_SESSION["tempPrenom"] = $tempPrenom;
+
+                // $tempPseudo=$this->params['pseudo'];      
+                // $_SESSION["tempPseudo"] = $tempPseudo;
+                    
+                    return $this->error;
+                }
+
+                if(empty($Apseudo==false)){
+                    $this->error['pseudo']='Ce pseudonyme éxiste déja';
+
+                //     //envoie une session temporaire 
+                //     $tempPseudo="";      
+                //     $_SESSION["tempPseudo"] = $tempPseudo;
+                //      $tempName=$this->params['name'];      
+                // $_SESSION["tempName"] = $tempName;
+                
+                // $tempPrenom=$this->params['prenom'];      
+                // $_SESSION["tempPrenom"] = $tempPrenom;
+
+               
+                
+                // $tempMail=$this->params['mail'];      
+                // $_SESSION["tempMail"] = $tempMail;
+                    return $this->error;
+                }
+                else{
+
+                        
+                // unset($_SESSION["tempName"]);
+                // unset($_SESSION["tempPrenom"]);
+                // unset($_SESSION["tempPseudo"]);
+                // unset($_SESSION["tempMail"]);
+                    /*            
+                    $name=$this->params['name'];
+                    $prenom=$this->params['prenom'];
+                    $pseudo=$this->params['pseudo'];
+                    $password=$this->params['password'];
+                    $mail=$this->params['mail'];
+                    echo "je suis bien";
+                   $bdd=new BddManager();
+                    $userRepository = $bdd->getUserRepository();
+                    $register = $userRepository->register($name,$prenom,$pseudo,$password,$mail); 
+               
+                Flight::redirect('/formLogin'); */
+                }
         }
 
     }     
-
- //normalement dans bdd manager
-       
-        function checkMail(){
-            $email = $this->params['email'];
-            $connexion = new PDO("mysql:host=localhost;dbname=blog;charset=UTF8", 'root', '');
-            $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $connexion->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-            $object = $connexion->prepare('SELECT * FROM user WHERE email=:email ');
-            $object->execute(array(
-                'email' => $email
-            ));
-            $user = $object->fetchAll(PDO::FETCH_ASSOC);
-
-            if(empty($user) == false){
-                return $user;
-            }
-            return false;
-        }
-
-         function register(){
-            $username = $this->params['username'];
-            $password = $this->params['password'];
-            $email = $this->params['email'];
-
-            $connexion = new PDO("mysql:host=localhost;dbname=blog;charset=UTF8", 'root', '');
-            $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $connexion->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-            $object = $connexion->prepare('INSERT INTO user SET  username=:username ,password=:password,email=:email ');
-            $object->execute(array(
-               'password' => md5($password),
-                'username' => $username,
-                'email' => $email
-            ));
-           
-           return $object->rowCount();
-        }
-        
- }
+   
+}

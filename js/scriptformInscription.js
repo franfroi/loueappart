@@ -241,33 +241,33 @@ $form.submit(function(event){ //On soumet/envoi le formulaire
     event.preventDefault(); //Empeche le rechargement de la page !
     cleanErrors();
  //check
-    if( $inputs.name.val().length < 8 ){
-        var msg = "Nom trop court !";
+    if( $inputs.name.val().length < 3 ){
+        var msg = "Nom minimun 3 caractères";
         showError(msg, $inputs.name);
     }
-    if( $inputs.prenom.val().length < 8 ){
-        var msg = "Prenom trop court !";
+    if( $inputs.prenom.val().length < 3 ){
+        var msg = "Prénom minimun 3 caractères";
         showError(msg, $inputs.prenom);
     }
 
      if( $inputs.pseudo.val().length < 8 ){
-        var msg = "Pseudo trop court !";
+        var msg = "Pseudo minimun 8 caractères";
         showError(msg, $inputs.pseudo);
     }
      if( $inputs.password.val().length < 8 ){
-        var msg = "Password trop court !";
+        var msg = "Password minimun 8 caractères";
         showError(msg, $inputs.password);
     }
     if( $inputs.repassword.val()!= $inputs.password.val()  ){
-        var msg = "Password non identique !";
+        var msg = "Password non identique ";
         showError(msg, $inputs.repassword);
     }
      if($inputs.mail.val().length < 1){
-        var msg = "Email non valide ! ";
+        var msg = "Email non valide  ";
         showError(msg, $inputs.mail);
     }
     if (!validate_Email($inputs.mail.val()))    {
-        var msg = "  Mauvais format Email !";
+        var msg = "  Mauvais format Email ";
         showError(msg, $inputs.mail);
         
          

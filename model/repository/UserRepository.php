@@ -11,12 +11,12 @@ class UserRepository
     }
 
     public function getUserById($id){
-        $object = $this->connexion->prepare('SELECT *
+        $pdo = $this->connexion->prepare('SELECT *
         FROM user WHERE id=:id');
-        $object->execute(array(
+        $pdo->execute(array(
             'id'=>$id
         ));
-        $user = $object->fetchAll(PDO::FETCH_ASSOC);
+        $user = $pdo->fetchAll(PDO::FETCH_ASSOC);
 
         if(!empty($user)){
             return new User($user[0]);
@@ -29,10 +29,10 @@ class UserRepository
 
     public function getAlluser(){
 
-        $object = $this->connexion->prepare('SELECT *
+        $pdo = $this->connexion->prepare('SELECT *
       FROM user');
-        $object->execute(array());
-        $users = $object->fetchAll(PDO::FETCH_ASSOC);
+        $pdo->execute(array());
+        $users = $pdo->fetchAll(PDO::FETCH_ASSOC);
 
 
         if(!empty($users)){
@@ -70,7 +70,7 @@ class UserRepository
         $query="UPDATE user SET name=:name, prenom=:prenom, pseudo=:pseudo, password=:password, mail=:mail WHERE id=:id";
         $pdo = $this->connexion->prepare($query);
         $pdo->execute(array(
-            'id' =>$voiture->getId(),
+            'id' =>$user->getId(),
             'name'=>$user->getName(),
             'prenom' => $user->getPrenom(),
             'pseudo'=>$user->getPseudo(),
@@ -123,13 +123,45 @@ class UserRepository
                 ));
             $user = $pdo->fetchAll(PDO::FETCH_ASSOC);
 
-                      
+                     
              if(!empty($user)){
-                 //var_dump($user);
+                
                 return new User($user[0]);
+               
                
             }
 
             return false;
          }
+
+
+        public function checkMail($mail){
+            $query="SELECT * FROM user WHERE mail=:mail";
+            $pdo = $this->connexion->prepare($query);
+            $pdo->execute(array(
+                'mail' => $mail
+            ));
+            $Amail = $pdo->fetchAll(PDO::FETCH_ASSOC);
+
+            if(!empty($Amail)){
+                return $Amail;
+            }
+            return false;
+        }
+        
+        public function checkPseudo($pseudo){
+            $query="SELECT * FROM user WHERE pseudo=:pseudo ";
+            $pdo = $this->connexion->prepare($query);
+            $pdo->execute(array(
+                'pseudo' => $pseudo
+            ));
+            $Apseudo = $pdo->fetchAll(PDO::FETCH_ASSOC);
+
+            if(empty($Apseudo) == false){
+                return $Apseudo;
+            }
+            return false;
+        }
+
+    
 }

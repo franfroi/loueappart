@@ -15,7 +15,7 @@ Flight::route('/', function(){
 
 //forminscription
 Flight::route('/formInscription', function(){
-   
+  $registerService= new registerService();
     Flight::render('formInscription');
 });
 
@@ -25,10 +25,7 @@ Flight::route('/formLogin', function(){
     Flight::render('formLogin');
 });
 
-// Flight::route('/formLogin', function(){
-//     $registerService = new registerService();
-//     Flight::render('formLogin');
-// });
+//loginService
 Flight::route('/loginService', function(){
    // include 'model/service/loginService.php';
     // // on définie une variable $request pour faciliter l'accès au données du formulaire
@@ -44,22 +41,15 @@ Flight::route('/loginService', function(){
     $loginService->setParams($params);
     $loginService->launchControls();
     
-   
-  
-    // on envoie les donner de getError() sur la page formInscription
-    // si $registerService == null alors l'utilisateur à bien était ajouter
-    //$registerService->register($params);
-    
-    
-     //Flight::render('formLogin', array('loginService' => $loginService->getError()));
-     Flight::render('formLogin', array('loginService' => $loginService->getError()));
+    Flight::render('formLogin', array('loginService' => $loginService->getError()));
  
 });
 
-Flight::route('/loginInscription', function(){
-   // include 'model/service/loginService.php';
-    // // on définie une variable $request pour faciliter l'accès au données du formulaire
+//registerService
+Flight::route('/registerService', function(){
+
     $request = Flight::request();
+
     // on créer l'array que l'on va passer à notre RegisterService
     $params = [
     'name' => $request->data['name'],
@@ -71,19 +61,28 @@ Flight::route('/loginInscription', function(){
     
     ];
     // on créer notre instance, on définie les paramètres, on lance la requete
-    $registerService = new loginService();
+    $registerService = new registerService();
     $registerService->setParams($params);
     $registerService->launchControls();
-    
+      
+    //si  erreur on renvoie au form
+    Flight::render('formInscription', array('registerService' => $registerService->getError()));
+
+    //si pas erreur on enregistre
+    if (($registerService->launchControls())==null)
+    {
+        $bdd= new BddManager;
+        $newUser=new User();
+        $newUser->setName($request->data['name']);
+        $newUser->setPrenom( $request->data['prenom']);
+        $newUser->setPseudo($request->data['pseudo']);
+        $newUser->setPassword( $request->data['password']);
+        $newUser->setMail($request->data['mail']);
+        $newUser->save($bdd);
+        Flight::redirect('/formLogin');
+    }
    
-  
-    // on envoie les donner de getError() sur la page formInscription
-    // si $registerService == null alors l'utilisateur à bien était ajouter
-    //$registerService->register($params);
-    
-    
-    // Flight::render('formInscription', array('registerService' => $registerService->getError()));
-      Flight::render('formInscription', array('registerService' => $registerService));
+     
  
 });
 
