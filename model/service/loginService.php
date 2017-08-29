@@ -31,14 +31,13 @@ class loginService
         }
         else{
            
-       
-
-                $pseudo=$this->params['pseudo'];
-                $password=$this->params['password'];
             
                 $bdd=new BddManager();
+                $user=new User;
+                $user->setPseudo($this->params['pseudo']);
+                $user->setPassword($this->params['password']);
                 $userRepository = $bdd->getUserRepository();
-                $user = $userRepository->checkUsernamePassword($pseudo,$password);
+                $user = $userRepository->checkUsernamePassword($user);
 
 
  
@@ -51,7 +50,7 @@ class loginService
                 else{
                     
                 $_SESSION["user"] = $user;
-                Flight::redirect('/');
+               // Flight::redirect('/');
                 }
         }
      }    

@@ -1,20 +1,22 @@
 <?= $header ?>
-
 <?php
+if (isset($_SESSION["user"])){
+$user=new User;
+$user= $_SESSION["user"] ;
 
+//echo $user->getId();
+
+}
 
         $bdd= new BddManager;
         $AnnoncesRepository=$bdd->getAnnonceRepository();
-        $Annonces = $AnnoncesRepository->getAllAnnonce();
-        
-        if (!empty($Annonces)){
+        $Annonces = $AnnoncesRepository->getAnnonceByUser($user);
+       
 
      foreach ($Annonces as $value) {
-          
+         
 ?>
-
-
- <form name="getannonce" method="POST" action="oneAnnonce">
+ <form name="getannonceByUser" method="POST" action="oneAnnonce">
 <table class="table table-hover">
        
   <thead>
@@ -24,7 +26,7 @@
       <th>Ville</th>
       <th>Nombre chambres</th>
       <th>Superficie</th>
-      <th>Prix / jour</th>
+      <th>Prix</th>
     </tr>
   </thead>
   <tbody>
@@ -37,9 +39,13 @@
       <td><?=$value->getChambre()?></td>
       <td><?=$value->getSuperficie()?></td>
       <td><?=$value->getPrix()?></td>
+      </tr>
+         <tr>
         <input name="getid" type="hidden" value="<?=$value->getId()?>">
-      <td> <input id="envoi" type="submit" class="btn btn-info" value="Voir annonce">
-    </tr>
+        <td> <input id="envoi" type="submit" class="btn btn-info" value="Voir annonce">
+        <td> <input id="envoi" type="submit" class="btn btn-info" value="Modifier annonce" formaction="UpdateAnnonce">
+        <td> <input id="envoi" type="submit" class="btn btn-info" value="Supprimer annonce"formaction="DeleteAnnonce">
+        </tr>
   
   </tbody>
 
@@ -48,9 +54,9 @@
           </table> 
           </form>
   <?php 
- } }
+ } 
 
-        
+
  
  
  ?>

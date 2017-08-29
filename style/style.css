@@ -19,8 +19,9 @@
     color:rgba(41, 41, 41, 1);
 }
 .form-style label {
-    display: block;
-    margin-bottom: 8px;
+    font-size: 12px;
+     
+   
 }
 .form-style input[type="text"],
 .form-style input[type="date"],
@@ -98,6 +99,12 @@
     text-shadow: 0 1px 0 rgba(255,255,255,0.2);
     border-radius: 15px 15px 15px 0px;
 }
+.form-style .intitule {
+   
+    color:rgba(51, 47, 36, 1);
+   
+    
+}
 
 .form-style input[type="submit"],
 .form-style input[type="button"]
@@ -171,7 +178,7 @@ position: absolute;
 /* infobulle */
 a{
     
-    margin-top: -30px;
+    margin-top:20px;
     padding-top: 0;
     float: right;
     color:rgba(152, 1, 1, 1);;
@@ -198,3 +205,38 @@ a{
      font-size: 12px;  
      transform:scale(1) rotate(0);        
 }
+    .navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+}
+.navbar .navbar-collapse {
+    text-align: center;
+}
+.table{
+    border-radius: 5px;
+    width: 50%;
+    margin: 0px auto;
+    float: none;
+    margin-top: 50px;
+}
+div.foto
+  {
+   width:300px; 
+    height:300px;
+   
+    margin: 0px auto;
+    margin-top: 50px;
+}
+div.louer{
+    
+    margin-left: 80%;
+}
+
+.form-group {
+    min-width: 0;
+    width: 70% !important;
+    margin: 0px auto;
+    margin-top: 50px;
+}
+
+

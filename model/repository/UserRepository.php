@@ -29,25 +29,29 @@ class UserRepository
 
     public function getAlluser(){
 
-        $pdo = $this->connexion->prepare('SELECT *
-      FROM user');
+//         $pdo = $this->connexion->prepare(' SELECT user.id as userid,admin.id as adminid FROM user AS user
+//  LEFT JOIN admin AS admin ON admin.userId=user.id;');
+  $pdo = $this->connexion->prepare(' SELECT user.* ,admin.statut,admin.userId  FROM user AS user
+ LEFT JOIN admin AS admin ON admin.userId=user.id;');
         $pdo->execute(array());
         $users = $pdo->fetchAll(PDO::FETCH_ASSOC);
 
-
-        if(!empty($users)){
+        // var_dump($users);
+        // die("ici");
+         if(!empty($users)){
             $tableauUsers=[];
             foreach($users as $tableauDonneesUsers){
-                $tableauUsers[]=new User($tableauDonneesUsers);
+                $tableauUsers[]=$tableauDonneesUsers;
+                
             }
             return $tableauUsers;
-        }
+        } 
         return false;
     }
     
     public function saveUser(User $user){
         if(empty($user->getId()) == true ){
-            $this->insertUser($user);
+            return $this->insertUser($user);
         }else{
             $this->updateUser($user);
         }
@@ -55,7 +59,8 @@ class UserRepository
 
     public function insertUser(User $user){
         $query="INSERT INTO user SET name=:name, prenom=:prenom, pseudo=:pseudo, password=:password, mail=:mail";
-        $pdo = $this->connexion->prepare($query);
+        $pdoLastInsert=$this->connexion;
+        $pdo = $pdoLastInsert->prepare($query);
         $pdo->execute(array(
             'name'=>$user->getName(),
             'prenom' => $user->getPrenom(),
@@ -63,7 +68,9 @@ class UserRepository
             'password'=>$user->getPassword(),
             'mail' => $user->getMail()
         ));
-        return $pdo->rowCount();
+        $insertId = $pdoLastInsert->lastInsertId();
+        return $insertId;
+        //die("ici");
     }
 
     public function updateUser(User $user){
@@ -82,25 +89,7 @@ class UserRepository
 
     public function deleteUser(User $user){
 
-        /**
-         * Effacer les entités filles (SQL)
-         * Ceci n'est pas nécessaire si notre clé contrainte est déclarée
-         * avec ON DELETE CASCADE. Par contre attention si vous avez
-         * des fichiers comme des photos vous devez les effacer ici
-         * tout comme les fichiers log.txt
-         */
-        // $mesCourses = $voiture->getMesCourses($this);
-        // var_dump($mesCourses);
-        // die();
-        // if(!empty($mesCourses)){
-        //     foreach($mesCourses as $objetCourses){
-        //         /**
-        //          * Alfonso: chaque objetPromotion à sa fonction delete
-        //          * pour qu'elle marche il faut qu'elle ait le BDD
-        //          */
-        //         $objetCourses->delete($this);
-        //     }
-        // }
+        
 
         $query="DELETE FROM user WHERE id=:id";
         $pdo = $this->connexion->prepare($query);
@@ -112,13 +101,13 @@ class UserRepository
 
 
         
-        public function checkUsernamePassword($pseudo,$password){
+        public function checkUsernamePassword(User $user){
             
             $query="SELECT id,pseudo FROM user WHERE pseudo=:pseudo AND password=:password";
             $pdo = $this->connexion->prepare($query);
             $pdo->execute(array(
-                'pseudo' => $pseudo,
-                'password' => $password
+                'pseudo'=>$user->getPseudo(),
+                'password'=>$user->getPassword()
                     
                 ));
             $user = $pdo->fetchAll(PDO::FETCH_ASSOC);
@@ -135,30 +124,30 @@ class UserRepository
          }
 
 
-        public function checkMail($mail){
+        public function checkMail(User $user){
             $query="SELECT * FROM user WHERE mail=:mail";
             $pdo = $this->connexion->prepare($query);
             $pdo->execute(array(
-                'mail' => $mail
+                'mail' =>$user->getMail()
             ));
-            $Amail = $pdo->fetchAll(PDO::FETCH_ASSOC);
+            $mail = $pdo->fetchAll(PDO::FETCH_ASSOC);
 
-            if(!empty($Amail)){
-                return $Amail;
+            if(!empty($mail)){
+                return $mail;
             }
             return false;
         }
         
-        public function checkPseudo($pseudo){
+        public function checkPseudo(User $user){
             $query="SELECT * FROM user WHERE pseudo=:pseudo ";
             $pdo = $this->connexion->prepare($query);
             $pdo->execute(array(
-                'pseudo' => $pseudo
+                'pseudo' => $user->getPseudo()
             ));
-            $Apseudo = $pdo->fetchAll(PDO::FETCH_ASSOC);
+            $pseudo = $pdo->fetchAll(PDO::FETCH_ASSOC);
 
-            if(empty($Apseudo) == false){
-                return $Apseudo;
+            if(empty($pseudo) == false){
+                return $pseudo;
             }
             return false;
         }

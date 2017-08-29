@@ -47,7 +47,8 @@
     public function save(BddManager $bddManager)
     {
       //$this tout court sert à passer l'objet lui même
-      $bddManager->getUserRepository()->saveUser($this);
+      return $bddManager->getUserRepository()->saveUser($this);
+     
     }
 
     public function delete(BddManager $bddManager)
